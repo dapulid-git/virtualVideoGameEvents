@@ -37,10 +37,10 @@ paths:
         credentials:
           arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
         passthroughBehaviour: "when_no_match"
-  /readTodo/{userId}:
+  /readUser/{userId}:
     get:
-      summary: Returns the To Do with the specified id.
-      #x-amazon-apigateway-request-validator: "params-only"
+      summary: Returns the user with the specified id.
+      x-amazon-apigateway-request-validator: "params-only"
       parameters:
         - in: path
           name: userId

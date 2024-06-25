@@ -84,7 +84,7 @@ Resources:
         ReadUser:
           Type: Api
           Properties:
-            Path: /readTodo/{userId}
+            Path: /readUser/{userId}
             Method: get
             RestApiId:
               Ref: ApiGateway
