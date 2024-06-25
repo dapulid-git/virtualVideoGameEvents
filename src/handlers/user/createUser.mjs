@@ -6,7 +6,7 @@ const ddbDocClient = DynamoDBDocument.from(client);
 
 const tableName = process.env.USER_TABLE;
 
-export const putItemHandler = async (event) => {
+export const createUserLambdaHandler = async (event) => {
 
   const { userId, userName, userType } = JSON.parse(event.body);
 

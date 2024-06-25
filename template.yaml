@@ -50,7 +50,7 @@ Resources:
     Properties:
       FunctionName: CreateUserFunction
       CodeUri: src/handlers/user
-      Handler: readUser.readUserLambdaHandler
+      Handler: createUser.createUserLambdaHandler
       Description: HTTP post method to add a user
       Policies:
         - DynamoDBCrudPolicy:
