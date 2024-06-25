@@ -43,7 +43,7 @@ paths:
       #x-amazon-apigateway-request-validator: "params-only"
       parameters:
         - in: path
-          name: id
+          name: userId
           #required: true
           schema:
             type: integer
