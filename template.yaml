@@ -86,8 +86,8 @@ Resources:
           Properties:
             Path: /readUser/{userId}
             Method: get
-            # RestApiId:
-            #   Ref: ApiGateway
+            RestApiId:
+              Ref: ApiGateway
 
   UserTable:
     Type: AWS::DynamoDB::Table
