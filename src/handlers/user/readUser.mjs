@@ -30,14 +30,30 @@ export const readUserLambdaHandler = async (event) => {
 
     try {
         const data = await ddbDocClient.get(readParams);
-        var item = data.Item;
 
-        var response = {
-            statusCode: 200,
-            body: JSON.stringify(item)
-        };
+        if (data.Item) {
 
-        return response;
+            var item = data.Item;
+
+            var response = {
+                statusCode: 200,
+                body: JSON.stringify(item)
+            };
+
+            return response;
+        } else {
+            response = {
+                statusCode: 400,
+                body: JSON.stringify({
+                    title: "Bad Request",
+                    code: 400,
+                    detail: `User with id ${userId} not found.`
+                })
+            };
+            return response;
+        }
+
+
 
     } catch (err) {
         return formatError(err);
