@@ -37,23 +37,27 @@ paths:
         credentials:
           arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
         passthroughBehaviour: "when_no_match"
-  /readUser/{userId}:
+  /readTodo/{userId}:
     get:
-      summary: read user.
+      summary: Returns the To Do with the specified id.
       x-amazon-apigateway-request-validator: "params-only"
       parameters:
         - in: path
-          name: userId
+          name: id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
       responses:
         "200":
-          description: successful response.
+          description: The To Do record.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SuccessfulResponseData"
       x-amazon-apigateway-integration:
         type: aws_proxy
-        httpMethod: "GET"
+        httpMethod: "POST"
         uri: 
           arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:ReadUserFunction/invocations
         credentials:
