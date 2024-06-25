@@ -42,10 +42,10 @@ Resources:
           Parameters:
             Location: './virtual-video-game-events.yaml'
 
-  ReadUserFunction:
+  CreateUserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: ReadUserFunction
+      FunctionName: CreateUserFunction
       CodeUri: src/handlers/user
       Handler: readUser.readUserLambdaHandler
       Runtime: nodejs20.x
