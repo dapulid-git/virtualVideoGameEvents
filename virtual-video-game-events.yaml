@@ -44,6 +44,7 @@ paths:
       parameters:
         - in: path
           name: userId
+          required: true
           schema:
             type: integer
             minimum: 1
