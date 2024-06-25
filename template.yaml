@@ -5,6 +5,9 @@ Description: virtualVideoGameEvents
 Globals:
   Function:
     Timeout: 3
+    Runtime: nodejs20.x
+    Architectures:
+      - x86_64
 
 Resources:
 
@@ -48,9 +51,13 @@ Resources:
       FunctionName: CreateUserFunction
       CodeUri: src/handlers/user
       Handler: readUser.readUserLambdaHandler
-      Runtime: nodejs20.x
-      Architectures:
-        - x86_64
+      Description: HTTP post method to add a user
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
       Events:
         ReadUser:
           Type: Api
@@ -59,6 +66,20 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: User
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
 
 Outputs:
   HelloWorldApi:
