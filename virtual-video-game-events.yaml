@@ -46,7 +46,7 @@ paths:
           name: userId
           required: true
           schema:
-            type: string
+            type: integer
             minimum: 1
       responses:
         "200":
@@ -59,7 +59,7 @@ paths:
         type: aws_proxy
         httpMethod: "GET"
         uri: 
-          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:readUserFunction/invocations
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:ReadUserFunction/invocations
         credentials:
           arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
         passthroughBehaviour: "when_no_match"

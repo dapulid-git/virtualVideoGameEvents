@@ -67,10 +67,10 @@ Resources:
             RestApiId:
               Ref: ApiGateway
 
-  readUserFunction:
+  ReadUserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: readUserFunction
+      FunctionName: ReadUserFunction
       CodeUri: src/handlers/user
       Handler: readUser.readUserLambdaHandler
       Description: HTTP get method to get a user
