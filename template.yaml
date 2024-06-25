@@ -59,11 +59,33 @@ Resources:
         Variables:
           USER_TABLE: !Ref UserTable
       Events:
+        CreateUser:
+          Type: Api
+          Properties:
+            Path: /createUser
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+
+  readUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: readUserFunction
+      CodeUri: src/handlers/user
+      Handler: readUser.readUserLambdaHandler
+      Description: HTTP get method to get a user
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
         ReadUser:
           Type: Api
           Properties:
-            Path: /readUser
-            Method: post
+            Path: /readUser/{userId}
+            Method: get
             RestApiId:
               Ref: ApiGateway
 

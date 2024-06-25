@@ -26,6 +26,19 @@ export const createUserLambdaHandler = async (event) => {
     }
   };
 
+  var formatError = function (error) {
+    var response = {
+      "statusCode": error.statusCode,
+      "headers": {
+        "Content-Type": "text/plain",
+        "x-amzn-ErrorType": error.code
+      },
+      "isBase64Encoded": false,
+      "body": error.code + ": " + error.message
+    }
+    return response
+  }
+
   try {
     const readData = await ddbDocClient.get(readParams);
 
@@ -51,8 +64,8 @@ export const createUserLambdaHandler = async (event) => {
       };
     }
 
-  } catch (err) {
-    throw new Error(err.stack);
+  } catch (error) {
+    return formatError(error);
   }
 
   return response;
