@@ -1,15 +1,18 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { required } from 'joi';
+import {Joi} from "joi";
+import {middy} from "middy";
+import {errorHandler} from "errorHandler";
+import {bodyValidator} from "validator"
 
 const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocument.from(client);
 const tableName = process.env.USER_TABLE;
 
-const middy = require("middy");
-const Joi = require("joi");
-const { errorHandler } = require("..../utils/errorHandler");
-const { bodyValidator } = require("..../utils/validator");
+//const middy = require("middy");
+//const Joi = require("joi");
+//const { errorHandler } = require("..../utils/errorHandler");
+//const { bodyValidator } = require("..../utils/validator");
 
 const createUserSchema = Joi.object({
   userName: Joi.string().required(),
