@@ -8,7 +8,7 @@ const tableName = process.env.USER_TABLE;
 
 export const readUserLambdaHandler = async (event) => {
 
-    const userName = event.pathParameters.userId;
+    const userName = event.pathParameters.userName;
     var response = {};
 
     try {
@@ -24,7 +24,7 @@ export const readUserLambdaHandler = async (event) => {
                 statusCode: 400,
                 body: JSON.stringify({
                     requestDateTime: new Date(),
-                    detail: `User with id ${userName} not found.`
+                    detail: `User ${userName} not found.`
                 })
             };
         } else {
