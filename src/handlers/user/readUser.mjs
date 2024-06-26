@@ -8,41 +8,46 @@ const tableName = process.env.USER_TABLE;
 
 export const readUserLambdaHandler = async (event) => {
 
-    const userId = event.pathParameters.userId;
+    const userName = event.pathParameters.userId;
     var response = {};
-    var readParams = {
-        TableName: tableName,
-        Key: { userId: userId },
-    };
 
-    let isvalid = validate(userId, "userId", "String", 10, 2);
+    try {
 
+        const readData = await ddbDocClient.query({
+            TableName: tableName,
+            KeyConditionExpression: "pk = :a",
+            ExpressionAttributeValues: { ":a": userName }
+        });
 
-    if (isvalid === "isValid") {
-        const readData = await ddbDocClient.get(readParams);
-
-        if (readData.Item) {
-            let item = readData.Item;
-            response = {
-                statusCode: 200,
-                body: JSON.stringify(item)
-            };
-        } else {
+        if (readData.Count === 0) {
             response = {
                 statusCode: 400,
                 body: JSON.stringify({
-                    title: "Bad Request",
-                    code: 400,
-                    detail: `User with id ${userId} not found.`
+                    requestDateTime: new Date(),
+                    detail: `User with id ${userName} not found.`
+                })
+            };
+        } else {
+            let readUserData = readData.Items;
+            response = {
+                statusCode: 200,
+                body: JSON.stringify({
+                    requestDateTime: new Date(),
+                    user: {
+                        name: readUserData[0].pk,
+                        type: readUserData[0].sk
+                    }
                 })
             };
         }
-        return response;
-    } else {
-        return isvalid;
+    } catch (error) {
+        return formatError(error);
     }
 
-};
+    return response;
+
+}
+
 
 function validate(data, name, type, maximum, minimum) {
 

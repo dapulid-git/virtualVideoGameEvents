@@ -28,7 +28,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessfulResponse"
+                $ref: "#/components/schemas/SuccessfulResponseCreateUser"
       x-amazon-apigateway-integration:
         type: aws_proxy
         httpMethod: "POST"
@@ -37,32 +37,23 @@ paths:
         credentials:
           arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
         passthroughBehaviour: "when_no_match"
-  /readUser/{userId}:
+  /readUser/{userName}:
     get:
       summary: Returns the user with the specified id.
       x-amazon-apigateway-request-validator: "params-only"
       parameters:
         - in: path
-          name: userId
           required: true
-          schema:
-            type: integer
-            minimum: 1
-        - in: header
-          name: ip
-          required: true
-          allowEmptyValue: false
+          name: userName
           schema:
             type: string
-            minimum: 1
-            maximum: 2
       responses:
         "200":
           description: The To Do record.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessfulResponseData"
+                $ref: "#/components/schemas/SuccessfulResponseReadUser"
       x-amazon-apigateway-integration:
         type: aws_proxy
         httpMethod: "POST"
@@ -75,30 +66,28 @@ components:
   schemas:
     RequestUserBody:
       required:
-        - userId
         - userName
         - userType
       type: object
       properties:
-        userId:
-          type: string
         userName:
           type: string
         userType:
           type: string
-    SuccessfulResponse:
-      required:
-        - detail
+    SuccessfulResponseCreateUser:
       type: object
       properties:
+        requestDateTime:
+          type: string
         detail:
           type: string
-    SuccessfulResponseData:
+    SuccessfulResponseReadUser:
       type: object
       properties:
-        userId:
+        requestDateTime:
           type: string
-        userName:
-          type: string
-        userType:
-          type: string
+        user:
+          type: object
+          properties:
+            name:
+              type: string
