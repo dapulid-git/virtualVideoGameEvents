@@ -1,0 +1,397 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: virtualVideoGameEvents
+
+Globals:
+  Function:
+    Timeout: 3
+    Runtime: nodejs20.x
+    Architectures:
+      - x86_64
+
+Resources:
+
+  ApiGatewayDefaultRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ApiGatewayDefaultRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: ExecuteLambdaPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 'lambda:InvokeFunction'
+                Resource: 
+                  Fn::Sub: "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+      EndpointConfiguration:
+        Type: REGIONAL
+      DefinitionBody: 
+        'Fn::Transform':
+          Name: 'AWS::Include'
+          Parameters:
+            Location: './virtual-video-game-events.yaml'
+
+## user functions
+
+  CreateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateUserFunction
+      CodeUri: src/
+      Handler: handler/user/createUser.createUserLambdaHandler
+      Description: HTTP post method to add a user
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        CreateUserFunction:
+          Type: Api
+          Properties:
+            Path: /createUser
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+
+  ReadUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadUserFunction
+      CodeUri: src/
+      Handler: handler/user/readUser.readUserLambdaHandler
+      Description: HTTP get method to get a user
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        ReadUserFunction:
+          Type: Api
+          Properties:
+            Path: /readUser/{userName}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+
+  DeleteUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteUserFunction
+      CodeUri: src/
+      Handler: handler/user/deleteUser.deleteUserLambdaHandler
+      Description: HTTP DELETE method to delete a user
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        DeleteUserFunction:
+          Type: Api
+          Properties:
+            Path: /deleteUser/{userName}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
+
+  UpdateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateUserFunction
+      CodeUri: src/
+      Handler: handler/user/updateUser.updateUserLambdaHandler
+      Description: HTTP UPDATE method to update a user
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        UpdateUserFunction:
+          Type: Api
+          Properties:
+            Path: /updateUser
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+
+## event functions
+
+  CreateEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateEventFunction
+      CodeUri: src/
+      Handler: handler/event/createEvent.createEventLambdaHandler
+      Description: HTTP POST method to create event
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        CreateEventFunction:
+          Type: Api
+          Properties:
+            Path: /createEvent
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+
+  ReadEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadEventFunction
+      CodeUri: src/
+      Handler: handler/event/readEvent.readEventLambdaHandler
+      Description: HTTP GET method to get a event
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        ReadEventFunction:
+          Type: Api
+          Properties:
+            Path: /readEvent/{eventId}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+
+  DeleteEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteEventFunction
+      CodeUri: src/
+      Handler: handler/event/deleteEvent.deleteEventLambdaHandler
+      Description: HTTP DELETE method to delete a event
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        DeleteEventFunction:
+          Type: Api
+          Properties:
+            Path: /deleteEvent/{eventId}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
+
+  UpdateEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateEventFunction
+      CodeUri: src/
+      Handler: handler/event/updateEvent.updateEventLambdaHandler
+      Description: HTTP UPDATE method to update a event
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        UpdateEventFunction:
+          Type: Api
+          Properties:
+            Path: /updateEvent
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+
+  ReadAllEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadAllEventFunction
+      CodeUri: src/
+      Handler: handler/event/readAllEvent.readAllEventLambdaHandler
+      Description: HTTP GET method to read all events
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        ReadAllEventFunction:
+          Type: Api
+          Properties:
+            Path: /readAllEvent
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+
+  SaleEventTicketEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SaleEventTicketEventFunction
+      CodeUri: src/
+      Handler: handler/event/saleTicketEvent.saleEventTicketLambdaHandler
+      Description: HTTP GET method to sell tickets event
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        SaleEventTicketEventFunction:
+          Type: Api
+          Properties:
+            Path: /saleTicket
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+
+  CreateMonitoringEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateMonitoringEventFunction
+      CodeUri: src/
+      Handler: handler/event/createMonitoringEvent.createMonitoringEventLambdaHandler
+      Description: HTTP POST method to create monitoring event
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        CreateMonitoringEventFunction:
+          Type: Api
+          Properties:
+            Path: /createMonitoringEvent
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+
+  ReadMonitoringEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadMonitoringEventFunction
+      CodeUri: src/
+      Handler: handler/event/readMonitoringEvent.readMonitoringEventLambdaHandler
+      Description: HTTP GET method read monitoring event with id
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        ReadMonitoringEventFunction:
+          Type: Api
+          Properties:
+            Path: /readMonitoringEvent/{monitoringEventId}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+
+  UpdateMonitoringEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateMonitoringEventFunction
+      CodeUri: src/
+      Handler: handler/event/updateMonitoringEvent.updateMonitoringEventLambdaHandler
+      Description: HTTP DELETE method update monitoring event with id
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        UpdateMonitoringEvent:
+          Type: Api
+          Properties:
+            Path: /updateMonitoringEvent
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+#----------------
+  DeleteMonitoringEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteMonitoringEventFunction
+      CodeUri: src/
+      Handler: handler/event/deleteMonitoringEvent.deleteMonitoringEventLambdaHandler
+      Description: HTTP DELETE method to delete a monitoring event
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          USER_TABLE: !Ref UserTable
+      Events:
+        DeleteEventFunction:
+          Type: Api
+          Properties:
+            Path: /deleteMonitoringEvent/{monitoringEventId}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
+
+## DB init     
+
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: User
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+        # - AttributeName: gsi
+        #   AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      # GlobalSecondaryIndexes:
+      #   - IndexName: GSI1
+      #     KeySchema: 
+      #       - AttributeName: gsi
+      #         KeyType: HASH
+      #       - AttributeName: sk
+      #         KeyType: RANGE
+      #     Projection:
+      #       ProjectionType: ALL
+      #     ProvisionedThroughput:
+      #       ReadCapacityUnits: 2
+      #       WriteCapacityUnits: 2
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
+Outputs:
+  URLAPI:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${ApiGateway.Stage}"

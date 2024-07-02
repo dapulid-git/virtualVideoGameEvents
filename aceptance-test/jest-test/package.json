@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "chai": "^5.1.1",
+    "chai-http": "^5.0.0",
+    "chai-openapi-response-validator": "^0.14.2",
+    "jest-openapi": "^0.14.2",
+    "mocha": "^10.5.2",
+    "api-contract-validator": "^2.2.8"
+  },
+  "scripts": {
+    "test:aceptance": "mocha ./aceptanceTest/ --timeout 7000" 
+  },
+  "devDependencies": {
+    
+  }
+}

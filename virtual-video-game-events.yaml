@@ -1,0 +1,601 @@
+openapi: 3.0.3
+info:
+  title: Virtual Video Game Events
+  description: Serverless API for virtual events video game events
+  version: 1.0.0
+
+x-amazon-apigateway-request-validators:
+  all:
+    validateRequestBody: true
+    validateRequestParameters: true
+  params-only:
+    validateRequestBody: false
+    validateRequestParameters: true
+
+paths:
+
+## user methods
+
+  /createUser:
+    post:
+      summary: create user.
+      x-amazon-apigateway-request-validator: "all"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUserBody'
+      responses:
+        "201":
+          description: successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:CreateUserFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+  
+  /readUser/{userName}:
+    get:
+      summary: Returns the user with the specified id.
+      x-amazon-apigateway-request-validator: "params-only"
+      parameters:
+        - in: path
+          required: true
+          name: userName
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseReadUser"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:ReadUserFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+  
+  /deleteUser/{userName}:
+    delete:
+      summary: Delete a user.
+      x-amazon-apigateway-request-validator: "params-only"
+      parameters:
+        - in: path
+          required: true
+          name: userName
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:DeleteUserFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /updateUser:
+    post:
+      summary: update user.
+      x-amazon-apigateway-request-validator: "all"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUpdateUserBody'
+      responses:
+        "200":
+          description: successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:UpdateUserFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+## event methods
+
+  /createEvent:
+    post:
+      summary: create event.
+      x-amazon-apigateway-request-validator: "all"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestEventBody'
+      responses:
+        "201":
+          description: successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:CreateEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /readEvent/{eventId}:
+    get:
+      summary: Returns the event with the specified id.
+      x-amazon-apigateway-request-validator: "params-only"
+      parameters:
+        - in: path
+          required: true
+          name: eventId
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseReadEvent"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:ReadEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /deleteEvent/{eventId}:
+    delete:
+      summary: Delete a event.
+      x-amazon-apigateway-request-validator: "params-only"
+      parameters:
+        - in: path
+          required: true
+          name: eventId
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:DeleteEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /updateEvent:
+    post:
+      summary: update event.
+      x-amazon-apigateway-request-validator: "all"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUpdateEventBody'
+      responses:
+        "200":
+          description: successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:UpdateEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /readAllEvent:
+    get:
+      summary: Returns all event.
+      x-amazon-apigateway-request-validator: "params-only"
+
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseReadAllEvent"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:ReadAllEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /saleTicket:
+    get:
+      summary: method to sell tickets.
+      x-amazon-apigateway-request-validator: "params-only"
+      parameters:
+        - in: query
+          required: true
+          name: eventId
+          schema:
+            type: string
+        - in: query
+          required: true
+          name: numberOfTicketsPurchased
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseSaleTicketEvent"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:SaleEventTicketEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /createMonitoringEvent:
+    post:
+      summary: create a monitoring event.
+      x-amazon-apigateway-request-validator: "all"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestcreateMonitoringEventBody'
+      responses:
+        "200":
+          description: successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:CreateMonitoringEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /readMonitoringEvent/{monitoringEventId}:
+    get:
+      summary: Returns the monitoring event with the specified id.
+      x-amazon-apigateway-request-validator: "params-only"
+      parameters:
+        - in: path
+          required: true
+          name: monitoringEventId
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseMonitoringEvent"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:ReadMonitoringEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+  /updateMonitoringEvent:
+    post:
+      summary: update a monitoring event.
+      x-amazon-apigateway-request-validator: "all"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUdateMonitoringEventBody'
+      responses:
+        "200":
+          description: successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:UpdateMonitoringEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+###-------------
+
+  /deleteMonitoringEvent/{monitoringEventId}:
+    delete:
+      summary: Delete a event.
+      x-amazon-apigateway-request-validator: "params-only"
+      parameters:
+        - in: path
+          required: true
+          name: monitoringEventId
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfulResponseCreate"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:DeleteMonitoringEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"
+
+components:
+  schemas:
+    RequestUserBody:
+      required:
+        - userName
+        - userType
+      type: object
+      properties:
+        userName:
+          type: string
+        userType:
+          type: string
+    RequestEventBody:
+      required:
+        - userName
+        - eventName
+        - eventCategory
+        - eventGameName
+        - numberOfTicket
+        - ticketPrice
+      type: object
+      properties:
+        userName:
+          type: string
+        eventName:
+          type: string
+        eventCategory:
+          type: string
+        eventGameName:
+          type: string
+        numberOfTicket:
+          type: number
+        ticketPrice:
+          type: number
+    SuccessfulResponseCreate:
+      type: object
+      properties:
+        requestDateTime:
+          type: string
+        detail:
+          type: string
+    SuccessfulResponseReadUser:
+      type: object
+      properties:
+        requestDateTime:
+          type: string
+        user:
+          type: object
+          properties:
+            name:
+              type: string
+            type:
+              type: string
+    SuccessfulResponseReadEvent:
+      type: object
+      properties:
+        requestDateTime:
+          type: string
+        event:
+          type: object
+          properties:
+            userName:
+              type: string
+            eventName:
+              type: string
+            eventCategory:
+              type: string
+            eventGameName:
+              type: string
+            numberOfTicket:
+              type: string
+            ticketPrice:
+              type: number
+    RequestUpdateUserBody:
+      required:
+        - userName
+        - userType
+        - usernameChange
+      type: object
+      properties:
+        userName:
+          type: string
+        usernameChange:
+          type: string
+        userType:
+          type: string
+    RequestUpdateEventBody:
+      required:
+        - eventId
+        - eventName
+        - eventCategory
+        - eventGameName
+        - numberOfTicket
+        - ticketPrice
+      type: object
+      properties:
+        eventId:
+          type: string
+        eventName:
+          type: string
+        eventCategory:
+          type: string
+        eventGameName:
+          type: string
+        numberOfTicket:
+          type: number
+        ticketPrice:
+          type: number
+    SuccessfulResponseReadAllEvent:
+      type: array
+      items:
+        type: object
+        properties:
+          eventId:
+            type: string
+          eventName:
+            type: string
+          eventCategory:
+            type: string
+          eventGameName:
+            type: string
+          numberOfTicket:
+            type: number
+          ticketPrice:
+            type: number
+    SuccessfulResponseSaleTicketEvent:
+      type: object
+      properties:
+        detail:
+         type: object
+         properties:
+          descripttion:
+            type: string
+          numberOfTicketsPurchased:
+            type: number
+          totalSalesValue:
+            type: number
+    RequestcreateMonitoringEventBody:
+      required:
+        - eventId
+        - userName
+        - monitoringEventName
+      type: object
+      properties:
+        eventId:
+          type: string
+        userName:
+          type: string
+        monitoringEventName:
+          type: string   
+    SuccessfulResponseMonitoringEvent:
+      type: object
+      properties:
+        eventId:
+          type: string
+        monitoringEventName:
+          type: string
+        eventName:
+          type: string
+        eventCategory:
+          type: string 
+        eventGameName:
+          type: string
+        amountOfAudiences:
+          type: number
+        amountOfParticipants:
+          type: number
+        numberOfTicket:
+          type: number
+        ticketPrice:
+          type: number
+        totalSalesValue:
+          type: number
+    RequestUdateMonitoringEventBody:
+      required:
+       - monitoringEventId
+       - amountOfAudiences
+       - amountOfParticipants
+      type: object
+      properties:
+        monitoringEventId:
+          type: string
+        amountOfAudiences:
+          type: number
+        amountOfParticipants:
+          type: number             
+  securitySchemes:
+    api_key:
+      type: "apiKey"
+      name: "x-api-key"
+      in: "header"
+
+
+

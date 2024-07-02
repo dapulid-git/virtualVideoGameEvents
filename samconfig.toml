@@ -1,0 +1,9 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "virtualVideoGameEvents"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-vn0kmwpnqefe"
+s3_prefix = "virtualVideoGameEvents"
+region = "us-east-1"
+capabilities = "CAPABILITY_NAMED_IAM"
+image_repositories = []
+disable_rollback = true
