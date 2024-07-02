@@ -113,5 +113,5 @@ jobs:
         working-directory: aceptance-test/jest-test
       - run: npm run build --if-present
         working-directory: aceptance-test/jest-test
-      - run: npm run test:aceptace
+      - run: npm run test:aceptance
         working-directory: aceptance-test/jest-test
