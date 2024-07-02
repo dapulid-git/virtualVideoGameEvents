@@ -368,25 +368,47 @@ Resources:
           AttributeType: S
         - AttributeName: sk
           AttributeType: S
-        # - AttributeName: gsi
-        #   AttributeType: S
+        - AttributeName: gsi1
+          AttributeType: S
+        - AttributeName: userName
+          AttributeType: S
       KeySchema:
         - AttributeName: pk
           KeyType: HASH
         - AttributeName: sk
           KeyType: RANGE
-      # GlobalSecondaryIndexes:
-      #   - IndexName: GSI1
-      #     KeySchema: 
-      #       - AttributeName: gsi
-      #         KeyType: HASH
-      #       - AttributeName: sk
-      #         KeyType: RANGE
-      #     Projection:
-      #       ProjectionType: ALL
-      #     ProvisionedThroughput:
-      #       ReadCapacityUnits: 2
-      #       WriteCapacityUnits: 2
+      GlobalSecondaryIndexes:
+        - IndexName: gsi1-sk-index
+          KeySchema: 
+            - AttributeName: gsi1 
+              KeyType: HASH
+            - AttributeName: sk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
+        - IndexName: sk-index
+          KeySchema: 
+            - AttributeName: sk 
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
+        - IndexName: userName-sk-index
+          KeySchema: 
+            - AttributeName: userName  
+              KeyType: HASH
+            - AttributeName: sk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
